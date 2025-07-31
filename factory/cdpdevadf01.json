@@ -1,0 +1,9 @@
+{
+	"name": "cdpdevadf01",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d3b996ef-f89f-40fe-885c-0ff5e050faf9",
+		"tenantId": "036f8fc6-5239-433a-9be9-ac628948c6a2"
+	}
+}

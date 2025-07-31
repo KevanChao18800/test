@@ -1,0 +1,41 @@
+{
+	"name": "036UNIONTransformationSource2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Set2.csv",
+				"fileSystem": "container01"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "EMPLOYEENAME",
+				"type": "String"
+			},
+			{
+				"name": "EMPLOYENAME",
+				"type": "String"
+			},
+			{
+				"name": "EMPSALARY",
+				"type": "String"
+			},
+			{
+				"name": "Monthname",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

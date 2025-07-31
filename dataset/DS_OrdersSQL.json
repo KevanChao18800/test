@@ -1,0 +1,17 @@
+{
+	"name": "DS_OrdersSQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrdersNew25may"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

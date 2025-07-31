@@ -1,0 +1,17 @@
+{
+	"name": "DSSinkRankTransformation",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DSRankTransformationSink"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,59 @@
+{
+	"name": "TransformStringify",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TransformStringifyJSONDS",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "TransformStringify",
+						"type": "DatasetReference"
+					},
+					"name": "TransformStringifySINK"
+				}
+			],
+			"transformations": [
+				{
+					"name": "TransformStringify"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as integer,",
+				"          empname as string,",
+				"          salary as integer,",
+				"          phone as (mobile as integer, home as integer)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source1",
+				"source1 stringify(phone = phone ? string,",
+				"     format: 'json') ~> TransformStringify",
+				"TransformStringify sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          {10} as string,",
+				"          {11} as string,",
+				"          Northwest as string,",
+				"          {United States} as string,",
+				"          {North America} as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> TransformStringifySINK"
+			]
+		}
+	}
+}

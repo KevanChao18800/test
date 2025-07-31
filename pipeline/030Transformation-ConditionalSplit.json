@@ -1,0 +1,37 @@
+{
+	"name": "030Transformation-ConditionalSplit",
+	"properties": {
+		"activities": [
+			{
+				"name": "DFConditionalSplit",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DFConditionalSplit",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Transformations"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-05-28T17:39:21Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,60 @@
+{
+	"name": "TRANSFORMaggregate",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DSTRANSFORMaggregate",
+						"type": "DatasetReference"
+					},
+					"name": "SourceTRANSFORMaggregate"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "TRANSFORMaggregatesqlsink",
+						"type": "DatasetReference"
+					},
+					"name": "TRANSFORMaggregatesink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "TRANSFORMaggregate"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as date 'yyyy-MM-dd',",
+				"          ProductKey as string,",
+				"          Country as string,",
+				"          EnglishProductName as string,",
+				"          SalesAmount as double '000,000,000.000',",
+				"          UnitPrice as double,",
+				"          OrderQuantity as integer,",
+				"          TaxAmt as long,",
+				"          TotalProductCost as long",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SourceTRANSFORMaggregate",
+				"SourceTRANSFORMaggregate aggregate(groupBy(Country),",
+				"     TotalSalesAggregate = sum(SalesAmount),",
+				"     partitionBy('hash', 1)) ~> TRANSFORMaggregate",
+				"TRANSFORMaggregate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> TRANSFORMaggregatesink"
+			]
+		}
+	}
+}

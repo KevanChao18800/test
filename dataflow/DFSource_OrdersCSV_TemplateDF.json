@@ -1,0 +1,63 @@
+{
+	"name": "DFSource_OrdersCSV_TemplateDF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DSDeriveColumn",
+						"type": "DatasetReference"
+					},
+					"name": "SourceOrdersCSV"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SinkDeriveColumn",
+						"type": "DatasetReference"
+					},
+					"name": "SinkSQLDB"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as date 'yyyy-MM-dd',",
+				"          ProductKey as string,",
+				"          Country as string,",
+				"          EnglishProductName as string,",
+				"          SalesAmount as string,",
+				"          UnitPrice as string,",
+				"          OrderQuantity as string,",
+				"          TaxAmt as string,",
+				"          TotalProductCost as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> SourceOrdersCSV",
+				"SourceOrdersCSV derive(Year = year(OrderDate),",
+				"          Month = month(OrderDate),",
+				"          Day = dayOfMonth(OrderDate),",
+				"          MonthName = toString(OrderDate, 'MMM'),",
+				"     partitionBy('hash', 1)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SinkSQLDB"
+			]
+		}
+	}
+}

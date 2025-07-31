@@ -1,0 +1,67 @@
+{
+	"name": "dfWindowTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DFWindowTransformationSOURCE",
+						"type": "DatasetReference"
+					},
+					"name": "dfsourceWindowTransformation"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DFDSSINKWindowTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "dfSINKWindowTransformation"
+				}
+			],
+			"transformations": [
+				{
+					"name": "WindowTransformation"
+				},
+				{
+					"name": "AGGREGATE"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as date,",
+				"          ProductKey as short,",
+				"          Country as string,",
+				"          EnglishProductName as string,",
+				"          SalesAmount as double,",
+				"          UnitPrice as double,",
+				"          OrderQuantity as boolean,",
+				"          TaxAmt as double,",
+				"          TotalProductCost as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> dfsourceWindowTransformation",
+				"AGGREGATE window(over(orderyear = year(OrderDate),",
+				"          OrderMonth = month(OrderDate)),",
+				"     asc(OrderDate, true),",
+				"     {Cumulative Sales} = sum({TOTAL SALES}),",
+				"     partitionBy('hash', 1)) ~> WindowTransformation",
+				"dfsourceWindowTransformation aggregate(groupBy(OrderDate),",
+				"     {TOTAL SALES} = sum(SalesAmount)) ~> AGGREGATE",
+				"WindowTransformation sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> dfSINKWindowTransformation"
+			]
+		}
+	}
+}
