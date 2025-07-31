@@ -1,0 +1,17 @@
+{
+	"name": "LocaltoAzureSQLDBSink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OrdersMIG"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,65 @@
+{
+	"name": "UNPIVOT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DFSinkSQLDBPivotTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "SourceUnpivotTransformation"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DSSqlSinkUnpivotTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "SinkUnpivotTransformation"
+				}
+			],
+			"transformations": [
+				{
+					"name": "UnpivotTransformation"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EnglishProductName as string,",
+				"          Australia as double,",
+				"          Canada as double,",
+				"          France as double,",
+				"          Germany as double,",
+				"          India as double,",
+				"          Italy as double,",
+				"          {United States} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table',",
+				"     partitionBy('hash', 1)) ~> SourceUnpivotTransformation",
+				"SourceUnpivotTransformation unpivot(output(",
+				"          Country as string,",
+				"          {Sales Amount} as double",
+				"     ),",
+				"     ungroupBy(EnglishProductName),",
+				"     lateral: true,",
+				"     ignoreNullPivots: true) ~> UnpivotTransformation",
+				"UnpivotTransformation sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SinkUnpivotTransformation"
+			]
+		}
+	}
+}

@@ -1,0 +1,64 @@
+{
+	"name": "DFPivotTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DFSourceDSPivotTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "DFSourcePivotTransformation"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DFSinkSQLDBPivotTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "DFSinkPivotTransformation"
+				}
+			],
+			"transformations": [
+				{
+					"name": "PivotTransformation"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as string,",
+				"          ProductKey as string,",
+				"          Country as string,",
+				"          EnglishProductName as string,",
+				"          SalesAmount as double,",
+				"          UnitPrice as double,",
+				"          OrderQuantity as double,",
+				"          TaxAmt as double,",
+				"          TotalProductCost as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DFSourcePivotTransformation",
+				"DFSourcePivotTransformation pivot(groupBy(EnglishProductName),",
+				"     pivotBy(Country),",
+				"     {} = sum(SalesAmount),",
+				"     columnNaming: '$V$N',",
+				"     lateral: true,",
+				"     partitionBy('hash', 1)) ~> PivotTransformation",
+				"PivotTransformation sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> DFSinkPivotTransformation"
+			]
+		}
+	}
+}

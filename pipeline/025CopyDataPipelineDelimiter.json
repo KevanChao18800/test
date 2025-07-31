@@ -1,0 +1,98 @@
+{
+	"name": "025CopyDataPipelineDelimiter",
+	"properties": {
+		"activities": [
+			{
+				"name": "copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Create Table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_CSVPipe",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_OrdersSQL",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Create Table",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_ASQL",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "IF OBJECT_ID('OrdersNew25may', 'U') IS NOT NULL\n    DROP TABLE OrdersNew25may;\n\nCREATE TABLE OrdersNew25may (\n    OrderDate datetime,\n    ProductKey int,\n    Country varchar(100),\n    EnglishProductName varchar(100),\n    SalesAmount money,\n    TaxAmt money\n);"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"folder": {
+			"name": "ADF Activities"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-05-27T20:06:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

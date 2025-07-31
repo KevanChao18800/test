@@ -1,0 +1,24 @@
+{
+	"name": "StorageEventTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "046StorageTrigger",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/landingpad/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/c96f19e7-12d3-4acd-aa2e-a10d1b257bba/resourceGroups/DEV/providers/Microsoft.Storage/storageAccounts/cdpadl01",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

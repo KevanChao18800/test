@@ -1,0 +1,51 @@
+{
+	"name": "DF001Intro",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_OrdersNew",
+						"type": "DatasetReference"
+					},
+					"name": "ReadCSV"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DFSqlSink",
+						"type": "DatasetReference"
+					},
+					"name": "SinkTest"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as date 'dd-mm-yyyy',",
+				"          ProductKey as short,",
+				"          Country as string,",
+				"          EnglishProductName as string,",
+				"          SalesAmount as double,",
+				"          TaxAmt as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ReadCSV",
+				"ReadCSV sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> SinkTest"
+			]
+		}
+	}
+}

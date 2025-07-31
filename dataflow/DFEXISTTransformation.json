@@ -1,0 +1,68 @@
+{
+	"name": "DFEXISTTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "JOINTransformationSalesDB",
+						"type": "DatasetReference"
+					},
+					"name": "SalesJOINTransformationSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ProductsJOINTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "ProductsJOINTransformation"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DFExistTransformationSink",
+						"type": "DatasetReference"
+					},
+					"name": "DFExistTransformationSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "exists1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ProductKey as string,",
+				"          CustomerKey as string,",
+				"          SalesAmount as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SalesJOINTransformationSource",
+				"source(output(",
+				"          ProductKey as string,",
+				"          EnglishProductName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ProductsJOINTransformation",
+				"SalesJOINTransformationSource, ProductsJOINTransformation exists(SalesJOINTransformationSource@ProductKey == ProductsJOINTransformation@ProductKey,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> DFExistTransformationSink"
+			]
+		}
+	}
+}

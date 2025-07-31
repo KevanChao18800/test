@@ -1,0 +1,124 @@
+{
+	"name": "014JSONtoSQL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy JSON to SQL DB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Create SQL DB Sink",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['EmployeeKey']"
+								},
+								"sink": {
+									"name": "EmpKey",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['EmpName']"
+								},
+								"sink": {
+									"name": "EmpName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['Contact']"
+								},
+								"sink": {
+									"name": "Contact",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": ""
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_EMPJSON",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_EMPSQL",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Create SQL DB Sink",
+				"description": "",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_ASQL",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "DROP TABLE IF EXISTS JSONTOSQL\n\nCREATE TABLE JSONTOSQL(\nEmpKey int,\nEmpName varchar(20),\nContact varchar(20)\n)"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"folder": {
+			"name": "ADF Activities"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-05-27T20:06:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

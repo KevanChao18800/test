@@ -1,0 +1,78 @@
+{
+	"name": "DFConditionalSplit",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ConditionalSplitSource",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ConditionalSplitIndiaSink",
+						"type": "DatasetReference"
+					},
+					"name": "ConditionalSplitIndiaSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "ConditionalSplitFranceSink",
+						"type": "DatasetReference"
+					},
+					"name": "ConditionalSplitFranceSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ConditionalSplitonCountry"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderDate as string,",
+				"          ProductKey as string,",
+				"          Country as string,",
+				"          EnglishProductName as string,",
+				"          SalesAmount as string,",
+				"          UnitPrice as string,",
+				"          OrderQuantity as string,",
+				"          TaxAmt as string,",
+				"          TotalProductCost as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(Country=='France',",
+				"     Country=='India',",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> ConditionalSplitonCountry@(France, India)",
+				"ConditionalSplitonCountry@France sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> ConditionalSplitIndiaSink",
+				"ConditionalSplitonCountry@India sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> ConditionalSplitFranceSink"
+			]
+		}
+	}
+}

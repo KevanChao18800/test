@@ -1,0 +1,77 @@
+{
+	"name": "Transform PARSE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TransformPARSE",
+						"type": "DatasetReference"
+					},
+					"name": "SourceTransformPARSE"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "CosmosDbNoSqlContainer1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkazurecosmosdbparse"
+				}
+			],
+			"transformations": [
+				{
+					"name": "TransformPARSEorder"
+				},
+				{
+					"name": "TransformPARSEbatch"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderId as integer,",
+				"          OrderDate as string,",
+				"          OrderDetails as string,",
+				"          BatchDetails as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> SourceTransformPARSE",
+				"SourceTransformPARSE parse(OrderDet = OrderDetails ? (Item as string,",
+				"          Qty as integer,",
+				"          Price as string),",
+				"     partitionBy('hash', 1),",
+				"     format: 'delimited',",
+				"     columnNamesAsHeader: false,",
+				"     columnDelimiter: '|',",
+				"     nullValue: '') ~> TransformPARSEorder",
+				"TransformPARSEorder parse(BatchDET = BatchDetails ? (batchid as string,",
+				"          site as string),",
+				"     format: 'delimited',",
+				"     columnNamesAsHeader: false,",
+				"     columnDelimiter: ':',",
+				"     nullValue: '') ~> TransformPARSEbatch",
+				"TransformPARSEbatch sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'document',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          OrderId,",
+				"          OrderDate,",
+				"          Item = OrderDet.Item,",
+				"          site = BatchDET.site,",
+				"          Qty = OrderDet.Qty,",
+				"          Price = OrderDet.Price",
+				"     )) ~> sinkazurecosmosdbparse"
+			]
+		}
+	}
+}

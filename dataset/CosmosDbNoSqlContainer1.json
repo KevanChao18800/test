@@ -1,0 +1,16 @@
+{
+	"name": "CosmosDbNoSqlContainer1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_CosmosDbNoSql",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {},
+		"typeProperties": {
+			"collectionName": "Container01"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

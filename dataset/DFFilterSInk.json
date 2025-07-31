@@ -1,0 +1,17 @@
+{
+	"name": "DFFilterSInk",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "machupichu"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

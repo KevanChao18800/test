@@ -1,0 +1,100 @@
+{
+	"name": "LookupTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DSLookupTransformationSource1",
+						"type": "DatasetReference"
+					},
+					"name": "LookupTransformationSource1"
+				},
+				{
+					"dataset": {
+						"referenceName": "LookupTransformationSource2",
+						"type": "DatasetReference"
+					},
+					"name": "LookupTransformationSource2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DSLookupTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "LookupTransformationSource3"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SqlSInkDBLookupTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "LookupTransformationSQLSINK"
+				}
+			],
+			"transformations": [
+				{
+					"name": "LookupTransformation"
+				},
+				{
+					"name": "LookupCustomers"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ProductKey as string,",
+				"          CustomerKey as integer,",
+				"          SalesAmount as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> LookupTransformationSource1",
+				"source(output(",
+				"          ProductKey as string,",
+				"          EnglishProductName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> LookupTransformationSource2",
+				"source(output(",
+				"          CustomerKey as integer,",
+				"          FullName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> LookupTransformationSource3",
+				"LookupTransformationSource1, LookupTransformationSource2 lookup(LookupTransformationSource1@ProductKey == LookupTransformationSource2@ProductKey,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     partitionBy('hash', 1),",
+				"     broadcast: 'auto')~> LookupTransformation",
+				"LookupTransformation, LookupTransformationSource3 lookup(LookupTransformationSource1@CustomerKey == LookupTransformationSource3@CustomerKey,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     partitionBy('hash', 1),",
+				"     broadcast: 'auto')~> LookupCustomers",
+				"LookupCustomers sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ProductKey = LookupTransformationSource1@ProductKey,",
+				"          CustomerKey = LookupTransformationSource1@CustomerKey,",
+				"          SalesAmount,",
+				"          EnglishProductName,",
+				"          FullName",
+				"     )) ~> LookupTransformationSQLSINK"
+			]
+		}
+	}
+}

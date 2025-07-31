@@ -1,0 +1,21 @@
+{
+	"name": "DS_CBInput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "TEST",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "CB/Input",
+				"fileSystem": "container01"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,21 @@
+{
+	"name": "LS_LOCALSQL",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "DESKTOP-K2O0AKC\\MSSSQLSERVER01",
+			"database": "AdventureWorksDW5",
+			"encrypt": "optional",
+			"trustServerCertificate": true,
+			"authenticationType": "Windows",
+			"userName": "DESKTOP-K2O0AKC\\admin",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJmMzFkMmQ2My1jZTVhLTRkMDgtOTYxNC05YjAxMjcyOWY2YWIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "SelfHostedIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

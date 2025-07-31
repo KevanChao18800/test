@@ -1,0 +1,37 @@
+{
+	"name": "031TransformationAGGREGATE",
+	"properties": {
+		"activities": [
+			{
+				"name": "TRANSFORMaggregate",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "TRANSFORMaggregate",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Transformations"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-05-28T19:56:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

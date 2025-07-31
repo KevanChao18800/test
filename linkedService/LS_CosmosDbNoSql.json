@@ -1,0 +1,12 @@
+{
+	"name": "LS_CosmosDbNoSql",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "CosmosDb",
+		"typeProperties": {
+			"connectionString": "AccountEndpoint=https://casadelpaw.documents.azure.com:443/;Database=Database01;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEU5M0ZEMzRDLTEwODMtNEJGMi05NzBFLTQ1RkI3RjlBNTc1NV8yNTcwM2M2NC01OTlmLTQ2NmYtYmI5OC1hNmQ5ZTg1MDY3NDUiDQp9"
+		}
+	}
+}

@@ -1,0 +1,53 @@
+{
+	"name": "DFRankTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DSRankTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "SourceRankTransformation"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DSSinkRankTransformation",
+						"type": "DatasetReference"
+					},
+					"name": "DFSinkRankTransformation"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RankTransformation"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EnglishProductName as string,",
+				"          SalesAmount as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SourceRankTransformation",
+				"SourceRankTransformation rank(desc(SalesAmount, true),",
+				"     output(RankColumn as long),",
+				"     dense: true) ~> RankTransformation",
+				"RankTransformation sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> DFSinkRankTransformation"
+			]
+		}
+	}
+}

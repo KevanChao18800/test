@@ -1,0 +1,19 @@
+{
+	"name": "DS_CBbinary",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "CB/Input",
+				"fileSystem": "container01"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

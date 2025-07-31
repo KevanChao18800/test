@@ -1,0 +1,17 @@
+{
+	"name": "TRANSFORMaggregatesqlsink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "sqlsinkTRANSFORMaggregate"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
