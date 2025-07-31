@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "cdpdevadf01"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"FileServer1_password": {
+			"value": ""
+		},
+		"LS_ADLS_accountKey": {
+			"value": ""
+		},
+		"LS_ASQL_password": {
+			"value": ""
+		},
+		"LS_CosmosDbNoSql_connectionString": {
+			"value": ""
+		},
+		"LS_JSON_accountKey": {
+			"value": ""
+		},
+		"LS_LOCALFILE_SelfHostedIR_password": {
+			"value": ""
+		},
+		"LS_LOCALSQL_password": {
+			"value": ""
+		},
+		"FileServer1_properties_typeProperties_host": {
+			"value": "C:\\"
+		},
+		"FileServer1_properties_typeProperties_userId": {
+			"value": "DESKTOP-K2O0AKC\\Admin"
+		},
+		"LS_ADLS_properties_typeProperties_url": {
+			"value": "https://cdpadl01.dfs.core.windows.net/"
+		},
+		"LS_ASQL_properties_typeProperties_server": {
+			"value": "cdpdevmysql.database.windows.net"
+		},
+		"LS_ASQL_properties_typeProperties_database": {
+			"value": "cdpdevmysqldb"
+		},
+		"LS_ASQL_properties_typeProperties_userName": {
+			"value": "cdpaventura"
+		},
+		"LS_JSON_properties_typeProperties_url": {
+			"value": "https://cdpadl01.dfs.core.windows.net/"
+		},
+		"LS_KV_properties_typeProperties_baseUrl": {
+			"value": "https://casadelpaw.vault.azure.net/"
+		},
+		"LS_LOCALFILE_SelfHostedIR_properties_typeProperties_host": {
+			"value": "C:\\"
+		},
+		"LS_LOCALFILE_SelfHostedIR_properties_typeProperties_userId": {
+			"value": "kevan.chao@gmail.com"
+		},
+		"LS_LOCALSQL_properties_typeProperties_server": {
+			"value": "DESKTOP-K2O0AKC\\MSSSQLSERVER01"
+		},
+		"LS_LOCALSQL_properties_typeProperties_database": {
+			"value": "AdventureWorksDW5"
+		},
+		"LS_LOCALSQL_properties_typeProperties_userName": {
+			"value": "DESKTOP-K2O0AKC\\admin"
+		},
+		"StorageEventTrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/c96f19e7-12d3-4acd-aa2e-a10d1b257bba/resourceGroups/DEV/providers/Microsoft.Storage/storageAccounts/cdpadl01"
+		}
+	}
+}
